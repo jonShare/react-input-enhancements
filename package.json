@@ -78,7 +78,8 @@
     "lodash.sortby": "^4.7.0",
     "moment": "^2.14.1",
     "react-base16-styling": "^0.4.6",
-    "react-day-picker-themeable": "^2.5.1"
+    "react-day-picker-themeable": "^2.5.1",
+    "react-tether": "^0.5.2"
   },
   "author": "Alexander <alexkuz@gmail.com> (http://kuzya.org/)",
   "license": "MIT",

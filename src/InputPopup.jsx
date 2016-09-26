@@ -1,5 +1,6 @@
 import React, { PureComponent, PropTypes } from 'react';
 import renderChild from './utils/renderChild';
+import TetherComponent from 'react-tether';
 
 export default class InputPopup extends PureComponent {
   constructor(props) {
@@ -8,7 +9,7 @@ export default class InputPopup extends PureComponent {
     this.state = {
       isActive: props.isActive,
       popupShown: props.popupShown,
-      hover: false,
+      hover: false
     };
   }
 
@@ -32,13 +33,9 @@ export default class InputPopup extends PureComponent {
   renderCaretSVG(styling, isActive, hovered, popupShown) {
     const svgStyling = styling('inputEnhancementsCaretSvg', isActive, hovered, popupShown);
     return popupShown ? (
-      <svg {...svgStyling} width='10' height='5' fill='currentColor'>
-        <path d='M0 5 H10 L5 0 z'/>
-      </svg>
+      <i className="fa fa-chevron-down"></i>
     ) : (
-      <svg {...svgStyling} width='10' height='5' fill='currentColor'>
-        <path d='M0 0 H10 L5 5 z'/>
-      </svg>
+      <i className="fa fa-chevron-down active"></i>
     );
   }
 
@@ -54,7 +51,7 @@ export default class InputPopup extends PureComponent {
     }
 
     if (nextProps.isActive !== this.props.isActive) {
-      this.setState({ isActive: nextProps.isActive })
+      this.setState({ isActive: nextProps.isActive})
     }
   }
 
@@ -70,19 +67,32 @@ export default class InputPopup extends PureComponent {
 
   render() {
     const { onRenderCaret, onRenderPopup, inputPopupProps, styling, ...restProps } = this.props;
-    const { isActive, hover, popupShown } = this.state;
+    const { isActive, hover, popupShown} = this.state;
+
 
     const caret = this.renderCaretSVG(styling, isActive, hover, popupShown);
 
     return (
-      <div {...styling('inputEnhancementsPopupWrapper')}
-           onFocus={this.handleFocus}
-           onBlur={this.handleBlur}
-           {...inputPopupProps}>
-        {this.renderInput(styling, restProps)}
-        {onRenderCaret(styling, isActive, hover, caret)}
-        {onRenderPopup(styling, isActive, popupShown)}
-      </div>
+      <TetherComponent
+        attachment="top left"
+        targetAttachment="bottom left"
+        constraints={[{
+          to: 'scrollParent',
+          attachment: 'together'
+        }]}
+      >
+        <div {...styling('inputEnhancementsPopupWrapper')}
+             onFocus={this.handleFocus}
+             onBlur={this.handleBlur}
+             {...inputPopupProps}>
+              {this.renderInput(styling, restProps)}
+              {onRenderCaret(styling, isActive, hover, caret)}
+        </div>
+        {
+          isActive &&
+            onRenderPopup(styling, isActive, popupShown)
+        }
+      </TetherComponent>
     );
   }
 
